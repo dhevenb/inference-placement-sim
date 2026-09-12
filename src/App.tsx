@@ -12,8 +12,10 @@ export default function App() {
       <header>
         <h1>Inference Placement Simulator</h1>
         <p>
-          Move the decode servers farther from the prefill servers, raise the request rate, and watch the KV-cache
-          transfer turn into the bottleneck.
+          See how the physical placement of AI inference servers shapes what customers experience when they use a
+          model. Set how far apart the servers sit and how many requests arrive per minute, then watch requests queue,
+          slow down, and get turned away. The goal is understanding, not realism: why “just add more servers in another
+          building” is not a free decision.
         </p>
       </header>
       <div className="layout">

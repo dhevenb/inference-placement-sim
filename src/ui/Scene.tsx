@@ -83,8 +83,10 @@ export function Scene({ state, tierId, linkUtil }: { state: SimState; tierId: Ti
   const arc = returnArc(decodeX);
   const linkMid = (LINK_X0 + decodeX) / 2;
 
+  // SPEC: the top 30 units of the 820×360 canvas are always empty (the return arc peaks near y=57),
+  // so they are cropped to make room for the key-terms footer at 1280×800.
   return (
-    <svg className="scene" viewBox="0 0 820 360" role="img" aria-label="Request flow animation">
+    <svg className="scene" viewBox="0 30 820 330" role="img" aria-label="Request flow animation">
       <path d={`M${arc.from.x},${arc.from.y} Q${arc.ctrl.x},${arc.ctrl.y} ${arc.to.x},${arc.to.y}`}
         className="arc" />
 
