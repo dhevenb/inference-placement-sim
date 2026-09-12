@@ -15,6 +15,10 @@ export const DEFAULT_TIER: TierId = 'rack';
 export const SAMPLE_WINDOW_SEC = 120;   // history.samples retention
 export const TTFT_HISTORY_MAX = 200;    // history.ttft retention (entries)
 export const REJECT_WINDOW_SEC = 60;    // rejectedAt retention
+export const UTIL_WINDOW_SEC = 5;       // utilization + bottleneck lookback
+export const TTFT_AVG_COUNT = 10;       // entries in ttftAvg10 and the bottleneck transfer mean
+export const BOTTLENECK_MIN_TTFT = 3;   // fewer TTFT entries than this → 'none'
+export const SATURATED_FRAC = 0.5;      // share of samples with a non-empty queue
 
 // Illustrative values: ordered like real hardware, scaled so effects show at 60 RPM.
 export const TIERS: Tier[] = [

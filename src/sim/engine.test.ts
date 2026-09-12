@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { DT, KV_SIZE_GB, PREFILL_SLOTS, PREFILL_TIME, QUEUE_CAPACITY, TIERS, getTier } from './constants';
 import { createInitialState, step } from './engine';
+import { computeMetrics } from './metrics';
 import type { Request, SimState, TierId } from './types';
 
 const count = (s: SimState, ...stages: Request['stage'][]) =>
   s.requests.filter((r) => stages.includes(r.stage)).length;
 
-// SPEC: B12 says run() returns final state plus metrics; metrics.ts lands in commit 3,
-// so until then run() returns the state and accepts a per-step observer for invariants.
+// SPEC: onStep is an optional per-step observer, used by the "at every step" invariants (T3–T5).
 function run(tierId: TierId, rpm: number, seconds: number, onStep?: (s: SimState) => void) {
   const state = createInitialState();
   const steps = Math.round(seconds / DT);
@@ -15,7 +15,7 @@ function run(tierId: TierId, rpm: number, seconds: number, onStep?: (s: SimState
     step(state, { tierId, rpm }, DT);
     onStep?.(state);
   }
-  return { state };
+  return { state, metrics: computeMetrics(state) };
 }
 
 describe('engine', () => {
@@ -90,5 +90,11 @@ describe('engine', () => {
       expect(achieved, `${tier.id} achieved ${achieved} RPM`).toBeGreaterThanOrEqual(lo);
       expect(achieved, `${tier.id} achieved ${achieved} RPM`).toBeLessThanOrEqual(hi);
     }
+  });
+
+  it('T9 bottleneck labels after 90 s', () => {
+    expect(run('rack', 60, 90).metrics.bottleneck).toBe('none');
+    expect(run('xaz', 60, 90).metrics.bottleneck).toBe('link');
+    expect(run('node', 240, 90).metrics.bottleneck).toBe('prefill');
   });
 });
