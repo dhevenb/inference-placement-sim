@@ -22,6 +22,8 @@ export const SATURATED_FRAC = 0.5;      // share of samples with a non-empty que
 export const MAX_FRAME_SEC = 0.25;      // clamp on real elapsed time per frame (inactive tabs)
 export const RENDER_INTERVAL_MS = 50;   // minimum spacing between React re-renders
 export const RPM_STEP = 5;
+export const CHART_WINDOW_SEC = 90;     // TTFT chart rolling window
+export const CHART_MIN_Y_SEC = 5;       // TTFT chart minimum y-axis ceiling
 
 // Illustrative values: ordered like real hardware, scaled so effects show at 60 RPM.
 export const TIERS: Tier[] = [
