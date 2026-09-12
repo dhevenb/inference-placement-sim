@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { DEFAULT_TIER, DT, MAX_FRAME_SEC, RENDER_INTERVAL_MS, RPM_DEFAULT } from '../sim/constants';
 import { createInitialState, step } from '../sim/engine';
 import { computeMetrics, type Metrics } from '../sim/metrics';
-import type { Params, SimState, TierId } from '../sim/types';
+import type { Params, Preset, SimState, TierId } from '../sim/types';
 
 /** Copy of the mutable engine state that React can safely hold and compare. */
 function snapshot(s: SimState): SimState {
@@ -17,7 +17,8 @@ function snapshot(s: SimState): SimState {
 
 export function useSimulation(): {
   state: SimState; params: Params; metrics: Metrics;
-  setTier(id: TierId): void; setRpm(rpm: number): void; reset(): void;
+  setTier(id: TierId): void; setRpm(rpm: number): void;
+  applyPreset(p: Preset): void; reset(): void;
 } {
   const stateRef = useRef<SimState>(createInitialState());
   const [params, setParams] = useState<Params>({ tierId: DEFAULT_TIER, rpm: RPM_DEFAULT });
@@ -67,6 +68,11 @@ export function useSimulation(): {
     setState(snapshot(stateRef.current));
   }, []);
 
+  const applyPreset = useCallback((p: Preset) => {
+    updateParams({ tierId: p.tierId, rpm: p.rpm });
+    reset();
+  }, [updateParams, reset]);
+
   const metrics = useMemo(() => computeMetrics(state), [state]);
-  return { state, params, metrics, setTier, setRpm, reset };
+  return { state, params, metrics, setTier, setRpm, applyPreset, reset };
 }

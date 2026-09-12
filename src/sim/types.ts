@@ -29,6 +29,8 @@ export interface Request {
 
 export interface Params { tierId: TierId; rpm: number; }
 
+export interface Preset { id: string; label: string; tierId: TierId; rpm: number; caption: string; }
+
 export interface SimState {
   time: number;               // sim seconds
   nextArrivalAt: number;

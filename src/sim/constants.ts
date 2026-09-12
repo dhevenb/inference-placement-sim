@@ -1,4 +1,4 @@
-import type { Tier, TierId } from './types';
+import type { Preset, Tier, TierId } from './types';
 
 export const DT = 1 / 60;               // fixed sim timestep, seconds
 export const QUEUE_CAPACITY = 5;
@@ -35,6 +35,17 @@ export const TIERS: Tier[] = [
     description: 'Traffic crosses one or more network switches' },
   { id: 'xaz', label: 'Cross-AZ', latencySec: 0.15, bandwidthGBps: 0.8, gapPx: 360,
     description: 'Traffic leaves the building over standard networking' },
+];
+
+export const PRESETS: Preset[] = [
+  { id: 'healthy',    label: 'Healthy',            tierId: 'rack',  rpm: 60,
+    caption: 'Queue stays empty. TTFT ≈ 1.2 s. Bottleneck: none.' },
+  { id: 'link',       label: 'Link saturated',     tierId: 'xaz',   rpm: 60,
+    caption: 'Transfers pile up on the link. Queue fills in ~15 s, then rejections. Bottleneck: network link.' },
+  { id: 'compute',    label: 'Compute overloaded', tierId: 'node',  rpm: 240,
+    caption: 'Best placement, too much traffic. Queue fills anyway. Bottleneck: prefill compute.' },
+  { id: 'knee',       label: 'At the knee',        tierId: 'xrack', rpm: 80,
+    caption: 'Right at capacity. Queue hovers, TTFT creeps up. Small changes tip it either way.' },
 ];
 
 export function getTier(id: TierId): Tier {

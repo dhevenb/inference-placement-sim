@@ -24,9 +24,9 @@ const lerp = (a: number, b: number, p: number) => a + (b - a) * Math.min(Math.ma
 interface Layout { time: number; decodeX: number; queueIndex: Map<number, number>; decodeIndex: Map<number, number> }
 
 function returnArc(decodeX: number) {
-  const from = { x: decodeX + DECODE_W / 2, y: BOX_TOP };
+  const from = { x: decodeX + DECODE_W - 12, y: BOX_TOP };
   const to = { x: USER.x, y: USER.y - 30 };
-  return { from, to, ctrl: { x: (from.x + to.x) / 2, y: -40 } };
+  return { from, to, ctrl: { x: (from.x + to.x) / 2, y: -80 } };
 }
 
 function position(r: Request, L: Layout): { x: number; y: number; opacity?: number } {
@@ -114,11 +114,20 @@ export function Scene({ state, tierId, linkUtil }: { state: SimState; tierId: Ti
         style={{ strokeWidth: 2 + 8 * linkUtil, opacity: 0.35 + 0.65 * linkUtil }} />
       <text x={linkMid} y={BOX_TOP - 26} className="label strong">{tier.label}</text>
       <text x={linkMid} y={BOX_TOP - 10} className="label">
-        {Math.round(tier.latencySec * 1000)} ms · {tier.bandwidthGBps} GB/s
+        KV-cache link: {Math.round(tier.latencySec * 1000)} ms · {tier.bandwidthGBps} GB/s
       </text>
 
       <rect x={decodeX} y={BOX_TOP} width={DECODE_W} height={BOX_H} rx={10} className="box" />
       <text x={decodeX + DECODE_W / 2} y={BOX_TOP + BOX_H + 20} className="label">Decode</text>
+
+      <g className="legend" transform="translate(24 338)">
+        <circle cx={0} cy={0} r={6} fill={YELLOW} className="req" />
+        <text x={12} y={4}>request</text>
+        <circle cx={82} cy={0} r={6} fill={RED} className="req" />
+        <text x={94} y={4}>rejected: queue full</text>
+        <circle cx={240} cy={0} r={7} className="slot held" />
+        <text x={253} y={4}>GPU slot still held while its KV cache crosses the link</text>
+      </g>
 
       {state.requests.map((r) => {
         const { x, y, opacity } = position(r, layout);
