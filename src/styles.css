@@ -1,10 +1,29 @@
-body {
-  margin: 0;
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  background: #f7f7f4;
-  color: #1c1c1c;
-}
+:root { --accent: #3657d6; --ink: #1c1c1c; --muted: #6b6b66; --line: #dcdcd4; }
+body { margin: 0; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; background: #f7f7f4; color: var(--ink); }
+.app { padding: 16px 24px; }
+h1 { margin: 0; font-size: 22px; }
+header p { margin: 2px 0 12px; color: var(--muted); }
 
-.app {
-  padding: 16px 24px;
-}
+.scene { width: 820px; max-width: 100%; height: auto; background: #fff; border: 1px solid var(--line); border-radius: 10px; }
+.scene .label { font-size: 12px; fill: var(--muted); text-anchor: middle; }
+.scene .strong { font-weight: 600; fill: var(--ink); }
+.scene .box { fill: #f1f3fb; stroke: #b9c3ea; stroke-width: 1.5; }
+.scene .slot { fill: #fff; stroke: #c9c9c0; stroke-width: 1.5; }
+.scene .slot.held { stroke: var(--accent); stroke-dasharray: 3 3; }
+.scene .user { fill: #9a9a92; }
+.scene .arc { fill: none; stroke: var(--line); stroke-width: 2; stroke-dasharray: 5 6; }
+.scene .link-track { stroke: var(--line); stroke-width: 2; }
+.scene .link { stroke: var(--accent); stroke-linecap: round; }
+.scene .req { stroke: rgba(0, 0, 0, 0.25); stroke-width: 1; transition: transform 80ms linear; }
+
+.controls { display: flex; gap: 20px; align-items: flex-end; margin-top: 10px; }
+.control { display: flex; flex-direction: column; gap: 6px; font-size: 13px; }
+.control-label { color: var(--muted); }
+.segmented { display: flex; }
+button { font: inherit; font-size: 13px; padding: 6px 10px; border: 1px solid var(--line); background: #fff; color: var(--ink); cursor: pointer; }
+.segmented button { border-radius: 0; margin-left: -1px; }
+.segmented button:first-child { border-radius: 6px 0 0 6px; }
+.segmented button:last-child { border-radius: 0 6px 6px 0; }
+button.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+input[type='range'] { accent-color: var(--accent); width: 220px; }
+.reset { border-radius: 6px; }
